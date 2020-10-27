@@ -1,35 +1,42 @@
 import React, { useState } from "react";
 
-function Jumbotron() {
-  const [issueStatus, setIssueStatus] = useState("Легкая");
+function Jumbotron({ onAdd }) {
+  const [issueStatus, setIssueComplexity] = useState("Легко");
   const [issueDescInput, setIssueDescInput] = useState("");
   const [issueAssignedToInput, setIssueAssignedToInput] = useState("");
+
   const statusesList = ["Легко", "Нормально", "Сложно"];
 
   function inputValueChange(event) {
     const eventId = event.target.id;
-    const eventValue = event.target.value
+    const eventValue = event.target.value;
     if (eventId === "issueDescInput") {
       setIssueDescInput(eventValue);
     } else if (eventId === "issueAssignedToInput") {
       setIssueAssignedToInput(eventValue);
     } else if (eventId === "issueSeverityInput") {
-      setIssueStatus(eventValue);
+      setIssueComplexity(eventValue);
     } else {
-        alert("Ошибка при обработке события")
+      alert("Ошибка при обработке события");
     }
   }
 
   function handleSubmit(event) {
-    console.log(
-      `status: ${issueStatus}; description: ${issueDescInput}; assigned to ${issueAssignedToInput}`
-    );
-    clearForm();
+    if (issueDescInput !== "" ) {
+      if(issueAssignedToInput !== ""){
+        onAdd(issueStatus, issueDescInput, issueAssignedToInput);
+        clearForm();
+      } else {
+        alert("Вы не назначили исполнителя");
+      }
+    } else {
+      alert("Вы не описали задачу");
+    }
     event.preventDefault();
   }
 
   function clearForm() {
-    setIssueStatus("Легкая");
+    setIssueComplexity("Легко");
     setIssueDescInput("");
     setIssueAssignedToInput("");
   }
